@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: example-worker
+spec:
+  serviceName: "example-worker"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        k8s-app: "example-worker"
+    spec:
+      containers:
+      - name: example-worker
+        image: buildbot/buildbot-worker
+        imagePullPolicy: Always
+        env:
+        - name: BUILDMASTER
+          value: 'buildbot-worker-endpoint'
+        - name: BUILDMASTER_PORT
+          value: '9989'
+        - name: WORKERNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: WORKERPASS
+          valueFrom:
+            secretKeyRef:
+              name: buildbot
+              key: worker_password

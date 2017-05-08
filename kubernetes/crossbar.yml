@@ -1,0 +1,19 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: crossbar
+    name: crossbar
+  name: crossbar
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: crossbar
+    spec:
+      containers:
+      - name: crossbar
+        image: crossbario/crossbar
+        imagePullPolicy: Always

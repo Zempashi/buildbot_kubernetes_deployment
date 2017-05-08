@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: buildbot-ui
+    name: buildbot-ui
+  name: buildbot-master
+spec:
+  type: NodePort
+  ports:
+  - name: buildbot-ui
+    port: 8010
+    targetPort: 8010
+    nodePort: 30010
+    protocol: TCP
+  selector:
+    k8s-app: buildbot-master
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: buildbot-worker
+    name: buildbot-worker
+  name: buildbot-worker-endpoint
+spec:
+  ports:
+  - name: buildbot-worker
+    port: 9989
+    targetPort: 9989
+    protocol: TCP
+  selector:
+    k8s-app: buildbot-master

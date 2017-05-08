@@ -1,0 +1,60 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: buildbot-master
+    name: buildbot-master
+  name: buildbot-master
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        k8s-app: buildbot-master
+    spec:
+      containers:
+      - name: buildbot-master
+        image: buildbot/buildbot-master:master
+        imagePullPolicy: Always
+        env:
+        - name: BUILDBOT_CONFIG_URL
+          value: file:///mnt/master.cfg
+        - name: BUILDBOT_MASTER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: buildbot-config
+              key: master_url
+        - name: NUM_WORKERS
+          valueFrom:
+            configMapKeyRef:
+              name: buildbot-config
+              key: num_workers
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: buildbot
+              key: pg_password
+        - name: WORKER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: buildbot
+              key: worker_password
+        volumeMounts:
+        - name: buildbot-master-file
+          mountPath: /mnt
+        livenessProbe:
+          httpGet:
+            path: /
+            port: buildbot-ui
+          initialDelaySeconds: 120
+          periodSeconds: 10
+        ports:
+        - containerPort: 8010
+          name: buildbot-ui
+          protocol: TCP
+      volumes:
+      - name: buildbot-master-file
+        configMap:
+          name: buildbot-master.cfg
+      serviceAccountName: default
