@@ -33,5 +33,5 @@ spec:
           mountPath: /var/lib/postgresql/data
       volumes:
       - name: pg-buildbot
-        hostPath:
-          path: /data/pg-buildbot
+        persistentVolumeClaim:
+          claimName: pg-buildbot
