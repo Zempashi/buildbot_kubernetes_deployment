@@ -4,6 +4,6 @@ metadata:
   name: buildbot-config
 data:
   master_url: 'http://__your_url__:30010/'
-  num_workers: '2'
+  num_workers: '3'
 
 # You can obtain the IP of minikube cluster by running 'minikube ip'
