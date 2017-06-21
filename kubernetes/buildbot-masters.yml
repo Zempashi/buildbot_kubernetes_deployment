@@ -53,6 +53,9 @@ spec:
         - containerPort: 8010
           name: buildbot-ui
           protocol: TCP
+        resources:
+          requests:
+            cpu: 50m
       volumes:
       - name: buildbot-master-file
         configMap:

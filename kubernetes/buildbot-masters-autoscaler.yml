@@ -1,0 +1,11 @@
+#apiVersion: autoscaling/v1
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: buildbot-master
+#spec:
+#  scaleTargetRef:
+#    kind: Deployment
+#    name: buildbot-master
+#  minReplicas: 2
+#  maxReplicas: 10
+#  targetCPUUtilizationPercentage: 10

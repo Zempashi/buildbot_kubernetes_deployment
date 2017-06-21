@@ -1,0 +1,37 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: locust-worker
+  labels:
+    name: locust
+    role: worker
+spec:
+  replicas: 2
+  selector:
+    name: locust
+    role: worker
+  template:
+    metadata:
+      labels:
+        name: locust
+        role: worker
+    spec:
+      containers:
+        - name: locust
+          image: hakobera/locust:latest
+          env:
+            - name: LOCUST_MODE
+              value: slave
+            - name: MASTER_HOST
+              value: locust-master
+            - name: TARGET_URL
+              value: http://buildbot-master:8010
+            - name: SCENARIO_FILE
+              value: /test/locustfile.py
+          volumeMounts:
+            - name: locust-task-file
+              mountPath: /test
+      volumes:
+        - name: locust-task-file
+          configMap:
+            name: locust-config
