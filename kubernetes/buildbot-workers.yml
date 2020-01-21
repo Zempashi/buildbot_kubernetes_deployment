@@ -1,11 +1,14 @@
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: example-worker
 spec:
   serviceName: "example-worker"
   replicas: 3
+  selector:
+    matchLabels:
+      k8s-app: example-worker
   template:
     metadata:
       labels:
